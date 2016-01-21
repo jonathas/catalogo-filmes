@@ -1,19 +1,19 @@
+var Filme = require('../models/filme.js');
+
 exports.index = function(req, res) {
 	res.render('index');
 }
 
 exports.lista = function(req, res) {
-	res.json({
-		titulo: 'Gangues de Nova Iorque',
-		diretor: 'Martin Scorsese',
-		ano: 2002
+	Filme.find({}, function(erro, filmes) {
+		res.json({filmes: filmes});
 	});
 }
 
 exports.grava = function(req, res) {
-	var filme = req.body;
+	var filme = new Filme(req.body);
 
-	console.log(filme);
-
-	res.send('Filme' + filme.titulo + ' recebido do servidor');
+	filme.save(function(error, filme) {
+		res.send('Filme' + filme.titulo + ' adicionado com sucesso!');
+	});
 }
